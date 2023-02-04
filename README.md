@@ -13,8 +13,8 @@ maya计算图的实现
 
 ### 安装
 
-注意下方的python是你的Python, 正常情况下可以直接通过python调用, 而Maya的python一般是C:\Program
-Files\Autodesk\<Maya版本>\bin\mayapy.exe
+注意下方的python是你的Python, 正常情况下可以直接通过python调用, 而Maya的python一般是"C:\Program
+Files\Autodesk\<Maya版本>\bin\mayapy.exe"
 
 ```commandline
 python -m pip install maya-rig-operation-graph
@@ -25,7 +25,8 @@ python -m pip install maya-rig-operation-graph
 注意:
 
 1. 请将Maya路径替换为自己的。
-2. 如果你需要安装到maya的python的site-packages下时, 请使用管理员身份运行安装命令. (在你没有安装到一个特定目录下时建议你这么干)
+2. 如果你需要安装到maya的python的site-packages下时, 请使用管理员身份运行安装命令. (
+   在你没有安装到一个特定目录下时建议你这么干)
 
 ```commandline
 "C:\Program Files\Autodesk\Maya2018\bin\mayapy.exe" -m pip install maya-rig-operation-graph

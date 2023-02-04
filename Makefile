@@ -6,8 +6,10 @@ export MAYA_PY = ${MAYA_BIN}/mayapy.exe
 clean:
 	rm -fr ./build
 	rm -fr ./dist
+make_rst_from_markdown:
+	pandoc -f markdown -t rst  README.md -o README.rst
 
-dist: clean
+dist: clean make_rst_from_markdown
 	"${MAYA_PY}" -m pip install 'twine>=1.5.0'
 	"${MAYA_PY}" setup.py sdist bdist_wheel
 

@@ -8,10 +8,10 @@ lib_name = 'maya-rig-operation-graph'
 author = 'cpcgskill',
 author_email = 'cpcgskill@outlook.com'
 
-version = '0.1.1'
+version = '0.1.3'
 
 description = 'maya计算图的实现'
-with open("README.md", "rb") as f:
+with open("README.rst", "rb") as f:
     long_description = f.read().decode(encoding='utf-8')
 
 project_homepage = 'https://github.com/cpcgskill/maya-rig-operation-graph'
@@ -33,7 +33,7 @@ setuptools.setup(
     author_email=author_email,
     description=description,
     long_description=long_description,
-    long_description_content_type="text/markdown",
+    long_description_content_type="text/x-rst",
     url=project_homepage,
     project_urls=project_urls,
     license=license,
