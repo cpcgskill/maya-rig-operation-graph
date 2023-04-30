@@ -15,11 +15,6 @@ from __future__ import unicode_literals, print_function, division
 import cpmel.cmds as cc
 from rig_operation_graph._utils import *
 
-__all__ = [
-    'add3d', 'sub3d', 'mul3d', 'div3d', 'pow3d', 'mean3d', 'sum3d',
-    'vector_add', 'vector_sub', 'vector_mul', 'vector_div', 'vector_pow', 'vector_mean', 'vector_sum'
-]
-
 
 def vector_add(ctx, a, b):
     n = ctx.create_node('plusMinusAverage')
@@ -104,31 +99,99 @@ def vector_sum(ctx, *values):
 
 sum3d = vector_sum
 
+
+def vector_dot_product(ctx, left, right):
+    n = ctx.create_node('vectorProduct')
+    n.rename('vector_dot_product')
+    n['operation'] = 1
+    n['normalizeOutput'] = False
+
+    set_or_connect_3d(left, n.attr('input1'))
+    set_or_connect_3d(right, n.attr('input2'))
+    return n.attr('outputX')
+
+
+def vector_cross_product(ctx, left, right):
+    n = ctx.create_node('vectorProduct')
+    n.rename('vector_cross_product')
+    n['operation'] = 2
+    n['normalizeOutput'] = False
+
+    set_or_connect_3d(left, n.attr('input1'))
+    set_or_connect_3d(right, n.attr('input2'))
+    return n.attr('output')
+
+
+def vector_normalization(ctx, in_attr):
+    if is_attr(in_attr):
+        in_attr = cc.new_object(in_attr)
+        if in_attr.type() == 'float3':
+            n = in_attr.node()
+            if cc.objectType(n) == 'vectorProduct':
+                n['normalizeOutput'] = True
+                return in_attr
+    n = ctx.create_node('vectorProduct')
+    n.rename('vector_normalization')
+    n['operation'] = 0
+    n['normalizeOutput'] = True
+
+    set_or_connect_3d(in_attr, n.attr('input1'))
+    return n.attr('output')
+
+
+__all__ = [
+    'add3d', 'sub3d', 'mul3d', 'div3d', 'pow3d', 'mean3d', 'sum3d',
+    'vector_add', 'vector_sub', 'vector_mul', 'vector_div', 'vector_pow', 'vector_mean', 'vector_sum',
+    'vector_dot_product', 'vector_cross_product', 'vector_normalization',
+]
+
 if __name__ == "__main__":
     from rig_core.ctx import Ctx
     from maya_test_tools import question_open_maya_gui
 
-    c = Ctx()
+    ctx = Ctx()
 
-    out_attr = vector_add(c, (1, 1, 1), (-1, -1, -1))
+    out_attr = vector_add(ctx, (1, 1, 1), (-1, -1, -1))
     print(out_attr, out_attr.get_value())
 
-    out_attr = vector_sub(c, out_attr, (-1, 1, -1))
+    out_attr = vector_sub(ctx, out_attr, (-1, 1, -1))
     print(out_attr, out_attr.get_value())
 
-    out_attr = vector_mul(c, out_attr, (1.5, 1.5, 1.5))
+    out_attr = vector_mul(ctx, out_attr, (1.5, 1.5, 1.5))
     print(out_attr, out_attr.get_value())
 
-    out_attr = vector_div(c, out_attr, (3, 3, 3))
+    out_attr = vector_div(ctx, out_attr, (3, 3, 3))
     print(out_attr, out_attr.get_value())
 
-    out_attr = vector_pow(c, out_attr, (3, 3, 3))
+    out_attr = vector_pow(ctx, out_attr, (3, 3, 3))
     print(out_attr, out_attr.get_value())
 
-    out_attr = vector_mean(c, out_attr, (0, 0, 0), (0, 0, 0), (0, 0, 0))
+    out_attr = vector_mean(ctx, out_attr, (0, 0, 0), (0, 0, 0), (0, 0, 0))
     print(out_attr, out_attr.get_value())
 
-    out_attr = vector_sum(c, out_attr, out_attr, out_attr, out_attr)
+    out_attr = vector_sum(ctx, out_attr, out_attr, out_attr, out_attr)
     print(out_attr, out_attr.get_value())
 
-    # question_open_maya_gui()
+    out_attr = vector_dot_product(ctx, (1, 0, 0), (1, 0, 0))
+    print(out_attr, out_attr.get_value())
+    assert 0.999 < out_attr.get_value() < 1.0001
+
+    out_attr = vector_cross_product(ctx, (0, 0, 1), (1, 0, 0))
+    print(out_attr, out_attr.get_value())
+    assert -0.0001 < out_attr.get_value().x < 0.0001
+    assert 0.999 < out_attr.get_value().y < 1.0001
+    assert -0.0001 < out_attr.get_value().z < 0.0001
+
+    out_attr = vector_normalization(ctx, (0, 0.5, 0))
+    print(out_attr, out_attr.get_value())
+    assert -0.0001 < out_attr.get_value().x < 0.0001
+    assert 0.999 < out_attr.get_value().y < 1.0001
+    assert -0.0001 < out_attr.get_value().z < 0.0001
+
+    out_attr = vector_cross_product(ctx, (0, 0, 5), (5, 0, 0))
+    print(out_attr, out_attr.get_value())
+    new_out_attr = vector_normalization(ctx, out_attr)
+    print(new_out_attr, new_out_attr.get_value())
+    assert new_out_attr == out_attr
+
+    question_open_maya_gui()
