@@ -24,8 +24,12 @@ else:
     num_t = (int, float)
 
 
+def is_attr(attr):
+    return isinstance(attr, (unicode_t, bytes_t, cc.Attr))
+
+
 def set_or_connect(in_value, out_attr):
-    if isinstance(in_value, (unicode_t, bytes_t, cc.Attr)):
+    if is_attr(in_value):
         in_attr = cc.new_object(in_value)
         in_attr >> out_attr
         return
@@ -33,7 +37,7 @@ def set_or_connect(in_value, out_attr):
 
 
 def set_or_connect_3d(in_value, out_attr):
-    if isinstance(in_value, (unicode_t, bytes_t, cc.Attr)):
+    if is_attr(in_value):
         in_attr = cc.new_object(in_value)
         in_attr >> out_attr
         return
@@ -47,11 +51,11 @@ def set_or_connect_3d(in_value, out_attr):
 
 
 def set_or_connect_matrix(in_value, out_attr):
-    if isinstance(in_value, (unicode_t, bytes_t, cc.Attr)):
+    if is_attr(in_value):
         in_attr = cc.new_object(in_value)
         in_attr >> out_attr
         return
     out_attr.set_value(in_value)
 
 
-__all__ = ['set_or_connect', 'set_or_connect_3d', 'set_or_connect_matrix']
+__all__ = ['is_attr', 'set_or_connect', 'set_or_connect_3d', 'set_or_connect_matrix']
