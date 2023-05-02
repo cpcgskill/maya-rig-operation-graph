@@ -50,11 +50,26 @@ def set_or_connect_3d(in_value, out_attr):
     set_or_connect(in_value[2], out_attr_list[2])
 
 
-def set_or_connect_matrix(in_value, out_attr):
+def set_or_connect_matrix(ctx, in_value, out_attr):
     if is_attr(in_value):
         in_attr = cc.new_object(in_value)
         in_attr >> out_attr
         return
+    if isinstance(in_value, (list, tuple)):
+        if (len(in_value) == 4 or len(in_value) == 16):
+            opened_in_value = [t for i in in_value for t in (i if isinstance(i, (list, tuple)) else [i])]
+            if len(opened_in_value) == 16:
+                n = ctx.create_node('fourByFourMatrix')
+                n.rename('convert_to_matrix')
+                for o, i in zip(opened_in_value, ['in00', 'in01', 'in02', 'in03',
+                                                  'in10', 'in11', 'in12', 'in13',
+                                                  'in20', 'in21', 'in22', 'in23',
+                                                  'in30', 'in31', 'in32', 'in33', ]):
+                    set_or_connect(o, n.attr(i))
+                in_attr = n.attr('output')
+                in_attr >> out_attr
+                return
+
     out_attr.set_value(in_value)
 
 

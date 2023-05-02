@@ -74,7 +74,7 @@ def add_matrix(ctx, *m_list):
     n = ctx.create_node('addMatrix')
     n.rename('add_matrix')
     for i, a in enumerate(m_list):
-        set_or_connect_matrix(a, n.attr('matrixIn[{}]'.format(i)))
+        set_or_connect_matrix(ctx, a, n.attr('matrixIn[{}]'.format(i)))
     return n.attr('matrixSum')
 
 
@@ -82,21 +82,21 @@ def mult_matrix(ctx, *m_list):
     n = ctx.create_node('multMatrix')
     n.rename('mult_matrix')
     for i, a in enumerate(m_list):
-        set_or_connect_matrix(a, n.attr('matrixIn[{}]'.format(i)))
+        set_or_connect_matrix(ctx, a, n.attr('matrixIn[{}]'.format(i)))
     return n.attr('matrixSum')
 
 
 def inverse_matrix(ctx, m):
     n = ctx.create_node('inverseMatrix')
     n.rename('inverse_matrix')
-    set_or_connect_matrix(m, n.attr('inputMatrix'))
+    set_or_connect_matrix(ctx, m, n.attr('inputMatrix'))
     return n.attr('outputMatrix')
 
 
 def pass_matrix(ctx, m, s):
     n = ctx.create_node('passMatrix')
     n.rename('pass_matrix')
-    set_or_connect_matrix(m, n.inMatrix)
+    set_or_connect_matrix(ctx, m, n.inMatrix)
     set_or_connect(s, n.inScale)
     return n.outMatrix
 
@@ -104,7 +104,7 @@ def pass_matrix(ctx, m, s):
 def matrix_to_transform_attr(ctx, a):
     n = ctx.create_node('decomposeMatrix')
     n.rename('matrix_to_transform')
-    set_or_connect_matrix(a, n.attr('inputMatrix'))
+    set_or_connect_matrix(ctx, a, n.attr('inputMatrix'))
     return n.attr('outputTranslate'), n.attr('outputRotate'), n.attr('outputScale'), n.attr('outputShear')
 
 
@@ -118,8 +118,12 @@ file -f -new;
 """)
     ctx = Ctx()
     a = new_matrix_from_transform_value(ctx, (1, 5, 6), (360, 0, 0), (1, 1, 1), (0, 0, 0))
-    b = new_matrix_from_transform_value(ctx, (1, 5, 6), (360, 0, 0), (1, 1, 1), (0, 0, 0))
-
+    # 俩个b切换之后下方的计算结果应该一致
+    # b = new_matrix_from_transform_value(ctx, (1, 5, 6), (360, 0, 0), (1, 1, 1), (0, 0, 0))
+    b = [[1.0, 0.0, 0.0, 0.0],
+         [0.0, 1.0, -2.4492935982947064e-16, 0.0],
+         [0.0, 2.4492935982947064e-16, 1.0, 0.0],
+         [1.0, 5.0, 6.0, 1.0], ]
     out_attr = add_matrix(ctx, a, b)
     print("add_matrix", out_attr, 'value == ', out_attr.get_value())
 
@@ -136,5 +140,5 @@ file -f -new;
     print("copy_matrix", out_attr, 'value == ', out_attr.get_value())
     print('check org matrix == new matrix', a.get_value() == out_attr.get_value())
 
-    out_attr = to_transform_attr(ctx, a)
-    print("to_transform_attr", out_attr)
+    out_attr = matrix_to_transform_attr(ctx, a)
+    print("matrix_to_transform_attr", out_attr)
