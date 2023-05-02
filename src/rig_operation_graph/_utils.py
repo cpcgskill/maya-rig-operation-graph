@@ -58,4 +58,18 @@ def set_or_connect_matrix(in_value, out_attr):
     out_attr.set_value(in_value)
 
 
-__all__ = ['is_attr', 'set_or_connect', 'set_or_connect_3d', 'set_or_connect_matrix']
+def set_or_connect_quaternion(in_value, out_attr):
+    if is_attr(in_value):
+        in_attr = cc.new_object(in_value)
+        in_attr >> out_attr
+        return
+    attr_plug = out_attr.api1_m_plug()
+    out_attr_list = [cc.new_object(attr_plug.child(i).name()) for i in range(attr_plug.numChildren())]
+
+    set_or_connect(in_value[0], out_attr_list[0])
+    set_or_connect(in_value[1], out_attr_list[1])
+    set_or_connect(in_value[2], out_attr_list[2])
+    set_or_connect(in_value[3], out_attr_list[3])
+
+
+__all__ = ['is_attr', 'set_or_connect', 'set_or_connect_3d', 'set_or_connect_matrix', 'set_or_connect_quaternion']

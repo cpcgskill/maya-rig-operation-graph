@@ -37,3 +37,5 @@ from rig_operation_graph.time import *
 from rig_operation_graph.random import *
 
 from rig_operation_graph.additional import *
+
+from rig_operation_graph.quaternion import *
