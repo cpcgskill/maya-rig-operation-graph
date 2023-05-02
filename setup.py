@@ -8,7 +8,7 @@ lib_name = 'maya-rig-operation-graph'
 author = 'cpcgskill',
 author_email = 'cpcgskill@outlook.com'
 
-version = '0.4.3'
+version = '0.5.3'
 
 description = 'maya计算图的实现'
 with open("README.rst", "rb") as f:
