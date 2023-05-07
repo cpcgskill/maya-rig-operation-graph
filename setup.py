@@ -8,7 +8,7 @@ lib_name = 'maya-rig-operation-graph'
 author = 'cpcgskill',
 author_email = 'cpcgskill@outlook.com'
 
-version = '0.6.0'
+version = '0.6.1'
 
 description = 'maya计算图的实现'
 with open("README.rst", "rb") as f:
@@ -23,7 +23,7 @@ license = 'Apache Software License (Apache 2.0)'
 packages = ['rig_operation_graph']
 python_requires = '>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*'
 install_requires = [
-    'maya-rig-core==0',
+    'maya-rig-core',
 ]
 
 setuptools.setup(
