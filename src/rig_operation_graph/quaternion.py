@@ -27,6 +27,7 @@ if not is_load:
 
 def quaternion_product(ctx, left, right):
     n = ctx.create_node('quatProd')
+    n.rename('quaternion_product')
     set_or_connect_quaternion(left, n.attr('input1Quat'))
     set_or_connect_quaternion(right, n.attr('input2Quat'))
     return n.attr('outputQuat')
@@ -34,6 +35,7 @@ def quaternion_product(ctx, left, right):
 
 def quaternion_add(ctx, left, right):
     n = ctx.create_node('quatAdd')
+    n.rename('quaternion_add')
     set_or_connect_quaternion(left, n.attr('input1Quat'))
     set_or_connect_quaternion(right, n.attr('input2Quat'))
     return n.attr('outputQuat')
@@ -41,6 +43,7 @@ def quaternion_add(ctx, left, right):
 
 def quaternion_sub(ctx, left, right):
     n = ctx.create_node('quatSub')
+    n.rename('quaternion_sub')
     set_or_connect_quaternion(left, n.attr('input1Quat'))
     set_or_connect_quaternion(right, n.attr('input2Quat'))
     return n.attr('outputQuat')
@@ -48,30 +51,35 @@ def quaternion_sub(ctx, left, right):
 
 def quaternion_invert(ctx, value):
     n = ctx.create_node('quatInvert')
+    n.rename('quaternion_invert')
     set_or_connect_quaternion(value, n.attr('inputQuat'))
     return n.attr('outputQuat')
 
 
 def quaternion_normalize(ctx, value):
     n = ctx.create_node('quatNormalize')
+    n.rename('quaternion_normalize')
     set_or_connect_quaternion(value, n.attr('inputQuat'))
     return n.attr('outputQuat')
 
 
 def quaternion_conjugate(ctx, value):
     n = ctx.create_node('quatConjugate')
+    n.rename('quaternion_conjugate')
     set_or_connect_quaternion(value, n.attr('inputQuat'))
     return n.attr('outputQuat')
 
 
 def quaternion_to_euler(ctx, value):
     n = ctx.create_node('quatToEuler')
+    n.rename('quaternion_to_euler')
     set_or_connect_quaternion(value, n.attr('inputQuat'))
     return n.attr('outputRotate')
 
 
 def quaternion_from_euler(ctx, value):
     n = ctx.create_node('eulerToQuat')
+    n.rename('quaternion_from_euler')
     set_or_connect_3d(value, n.attr('inputRotate'))
     return n.attr('outputQuat')
 

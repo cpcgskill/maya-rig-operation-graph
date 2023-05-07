@@ -20,7 +20,11 @@ if not is_load:
     cc.loadPlugin('matrixNodes', qt=True)
 
 __all__ = [
-    'new_matrix_from_transform', 'new_matrix_from_transform_attr', 'new_matrix_from_transform_value',
+    'new_matrix_from_transform',
+    'new_matrix_from_transform_attr',
+    'matrix_from_transform',
+    'new_matrix_from_transform_value',
+    'matrix_from_transform_using_quaternion',
     'copy_matrix',
     'add_matrix', 'mult_matrix',
     'inverse_matrix', 'pass_matrix',
@@ -30,7 +34,7 @@ __all__ = [
 
 def new_matrix_from_transform(ctx, t=None, r=None, s=None, sh=None):
     n = ctx.create_node('composeMatrix')
-    n.rename('new_matrix_from_transform')
+    n.rename('matrix_from_transform')
     if t is not None:
         set_or_connect_3d(t, n.attr('inputTranslate'))
     if r is not None:
@@ -43,6 +47,22 @@ def new_matrix_from_transform(ctx, t=None, r=None, s=None, sh=None):
 
 
 new_matrix_from_transform_attr = new_matrix_from_transform
+
+matrix_from_transform = new_matrix_from_transform
+
+
+def matrix_from_transform_using_quaternion(ctx, t=None, q=None, s=None, sh=None):
+    n = ctx.create_node('composeMatrix')
+    n.rename('matrix_from_transform_using_quaternion')
+    if t is not None:
+        set_or_connect_3d(t, n.attr('inputTranslate'))
+    if q is not None:
+        set_or_connect_quaternion(q, n.attr('inputRotateOrder'))
+    if s is not None:
+        set_or_connect_3d(s, n.attr('inputScale'))
+    if sh is not None:
+        set_or_connect_3d(sh, n.attr('inputShear'))
+    return n.attr('outputMatrix')
 
 
 def new_matrix_from_transform_value(ctx, t, r, s, sh=(0.0, 0.0, 0.0)):
