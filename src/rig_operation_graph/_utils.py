@@ -36,18 +36,22 @@ def set_or_connect(in_value, out_attr):
     out_attr.set_value(in_value)
 
 
-def set_or_connect_3d(in_value, out_attr):
-    if is_attr(in_value):
-        in_attr = cc.new_object(in_value)
-        in_attr >> out_attr
-        return
-
+def set_or_connect_3d(in_attr, out_attr):
     attr_plug = out_attr.api1_m_plug()
-    out_attr_list = [cc.new_object(attr_plug.child(i).name()) for i in range(attr_plug.numChildren())]
+    child_of_out_attr_list = [cc.new_object(attr_plug.child(i).name()) for i in range(attr_plug.numChildren())]
 
-    set_or_connect(in_value[0], out_attr_list[0])
-    set_or_connect(in_value[1], out_attr_list[1])
-    set_or_connect(in_value[2], out_attr_list[2])
+    if is_attr(in_attr):
+        in_attr = cc.new_object(in_attr)
+        if in_attr.type() not in {'float', 'double'}:
+            in_attr >> out_attr
+            return
+        in_attr = [in_attr, in_attr, in_attr]
+    elif isinstance(in_attr, (int, float)):
+        in_attr = [in_attr, in_attr, in_attr]
+
+    set_or_connect(in_attr[0], child_of_out_attr_list[0])
+    set_or_connect(in_attr[1], child_of_out_attr_list[1])
+    set_or_connect(in_attr[2], child_of_out_attr_list[2])
 
 
 def set_or_connect_matrix(ctx, in_value, out_attr):

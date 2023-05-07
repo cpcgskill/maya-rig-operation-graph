@@ -154,6 +154,12 @@ if __name__ == "__main__":
     out_attr = vector_add(ctx, (1, 1, 1), (-1, -1, -1))
     print(out_attr, out_attr.get_value())
 
+    out_attr = vector_add(ctx, (1, 1, 1), -1)
+    print(out_attr, out_attr.get_value())
+
+    out_attr = vector_add(ctx, (1, 1, 1), cc.new_object(out_attr.name()+'x'))
+    print(out_attr, out_attr.get_value())
+
     out_attr = vector_sub(ctx, out_attr, (-1, 1, -1))
     print(out_attr, out_attr.get_value())
 
