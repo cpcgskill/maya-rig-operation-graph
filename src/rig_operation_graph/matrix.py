@@ -57,7 +57,8 @@ def matrix_from_transform_using_quaternion(ctx, t=None, q=None, s=None, sh=None)
     if t is not None:
         set_or_connect_3d(t, n.attr('inputTranslate'))
     if q is not None:
-        set_or_connect_quaternion(q, n.attr('inputRotateOrder'))
+        n['useEulerRotation'] = False
+        set_or_connect_quaternion(q, n.attr('inputQuat'))
     if s is not None:
         set_or_connect_3d(s, n.attr('inputScale'))
     if sh is not None:
