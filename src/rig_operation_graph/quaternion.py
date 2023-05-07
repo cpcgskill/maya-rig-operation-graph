@@ -70,6 +70,12 @@ def quaternion_to_euler(ctx, value):
     return n.attr('outputRotate')
 
 
+def quaternion_from_euler(ctx, value):
+    n = ctx.create_node('eulerToQuat')
+    set_or_connect_3d(value, n.attr('inputRotate'))
+    return n.attr('outputQuat')
+
+
 __all__ = [
     'quaternion_product',
     'quaternion_add',
@@ -78,6 +84,7 @@ __all__ = [
     'quaternion_normalize',
     'quaternion_conjugate',
     'quaternion_to_euler',
+    'quaternion_from_euler',
 ]
 
 if __name__ == '__main__':
@@ -112,5 +119,9 @@ if __name__ == '__main__':
     # Test quaternion_to_euler
     out_attr = quaternion_to_euler(ctx, (0, 0, 0, 1))
     print("quaternion_to_euler:", out_attr.get_value())
+
+    # Test quaternion_from_euler
+    out_attr = quaternion_from_euler(ctx, (0, 0, 0))
+    print("quaternion_from_euler:", out_attr.get_value())
 
     question_open_maya_gui()
